@@ -16,11 +16,14 @@ services:
       - app_logs:/logs:rw              # Persistence data
   
   logstash:
-    image: docker.elastic.co/logstash/logstash:$ELK_VERSION
+    build: 
+      context: ./logstash
+      args:
+        ELK_VERSION: $ELK_VERSION
     container_name: logstash
     volumes:
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro                # Pipeline configuration
-      - app_logs:/logs:rw                                           # Persistence data
+      - app_logs:/logs:rw                                                  # Persistence data
     ports:
       - "5000:5000"
       - "9600:9600"

@@ -22,15 +22,16 @@ import com.example.springboot.util.LoggerUtil;
 @RequestMapping("/api")
 public class UserController {
 	protected static Logger logger = Logger.getLogger(UserController.class);
+	private static final String FLOW_NAME = "UserFlow";
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@PostMapping("/users")
 	public User create(@RequestBody User user) {
-		LoggerUtil.pushLog(logger, "UserFlow", "Start", user.getId(), user.getId(), "AU");
+		LoggerUtil.pushLog(logger, FLOW_NAME, LoggerUtil.START, user.getId(), user.getId(), LoggerUtil.ADD_UPDATE);
 		User createdUser = userRepository.save(user);
-		LoggerUtil.pushLog(logger, "UserFlow", "End", user.getId(), user.getId(), "AU");
+		LoggerUtil.pushLog(logger, FLOW_NAME, LoggerUtil.END, user.getId(), user.getId(), LoggerUtil.ADD_UPDATE);
 		return createdUser;
 	}
 
@@ -42,21 +43,20 @@ public class UserController {
 
 	@PutMapping("/users/{user_id}")
 	public User update(@PathVariable("user_id") Long userId, @RequestBody User userObject) {
-		LoggerUtil.pushLog(logger, "UserFlow", "Start", userId, userId, "AU");
+		LoggerUtil.pushLog(logger, FLOW_NAME, LoggerUtil.START, userId, userId, LoggerUtil.ADD_UPDATE);
 		User user = userRepository.getOne(userId);
 		user.setName(userObject.getName());
 		user.setCountry(userObject.getCountry());
 		User updatedUser = userRepository.save(user);
-		LoggerUtil.pushLog(logger, "UserFlow", "End", user.getId(), user.getId(), "AU");
+		LoggerUtil.pushLog(logger, FLOW_NAME, LoggerUtil.END, user.getId(), user.getId(), LoggerUtil.ADD_UPDATE);
 		return updatedUser;
 	}
 
 	@DeleteMapping("/users/{user_id}")
 	public List<User> delete(@PathVariable("user_id") Long userId) {
-		LoggerUtil.pushLog(logger, "UserFlow", "Start", userId, userId, "DE");
-		// userRepository.delete(userId);
+		LoggerUtil.pushLog(logger, FLOW_NAME, LoggerUtil.START, userId, userId, LoggerUtil.DELETE);
 		List<User> users = userRepository.findAll();
-		LoggerUtil.pushLog(logger, "UserFlow", "End", userId, userId, "DE");
+		LoggerUtil.pushLog(logger, FLOW_NAME, LoggerUtil.END, userId, userId, LoggerUtil.DELETE);
 		return users;
 	}
 
